@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TV Distance — The Shadow Area Visualizer</title>
+  <meta name="description" content="Interactive visualization of Total Variation distance as the shaded area between two probability distributions.">
+  <link rel="stylesheet" href="style.css">
+  <!-- D3.js v7 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <!-- MathJax 3 -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']],
+        macros: {
+          E: '\\mathbb{E}',
+          Var: '\\mathrm{Var}',
+          TV: '\\mathrm{TV}'
+        }
+      },
+      svg: { fontCache: 'global' },
+      startup: { typeset: false }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>Total Variation Distance</h1>
+      <p class="subtitle">The Shadow Area Visualizer</p>
+    </header>
+
+    <!-- Main visualization -->
+    <div class="viz-wrapper">
+      <div id="chart"></div>
+      <!-- TV Distance readout -->
+      <div class="tv-readout">
+        <div class="tv-label">TV Distance</div>
+        <div class="tv-value" id="tv-value">0.000</div>
+        <div class="tv-formula" id="tv-formula"></div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <!-- Distribution P -->
+      <div class="control-group">
+        <div class="control-header">
+          <span class="dist-badge dist-p">P</span>
+          <span class="dist-name">Distribution P</span>
+        </div>
+        <div class="slider-row">
+          <label>μ<sub>P</sub></label>
+          <input type="range" id="mu-p" min="-5" max="5" step="0.05" value="0">
+          <span class="slider-val" id="mu-p-val">0.00</span>
+        </div>
+        <div class="slider-row">
+          <label>σ<sub>P</sub></label>
+          <input type="range" id="sigma-p" min="0.3" max="3" step="0.05" value="1">
+          <span class="slider-val" id="sigma-p-val">1.00</span>
+        </div>
+      </div>
+
+      <!-- Distribution Q -->
+      <div class="control-group">
+        <div class="control-header">
+          <span class="dist-badge dist-q">Q</span>
+          <span class="dist-name">Distribution Q</span>
+        </div>
+        <div class="slider-row">
+          <label>μ<sub>Q</sub></label>
+          <input type="range" id="mu-q" min="-5" max="5" step="0.05" value="2">
+          <span class="slider-val" id="mu-q-val">2.00</span>
+        </div>
+        <div class="slider-row">
+          <label>σ<sub>Q</sub></label>
+          <input type="range" id="sigma-q" min="0.3" max="3" step="0.05" value="1">
+          <span class="slider-val" id="sigma-q-val">1.00</span>
+        </div>
+      </div>
+
+      <!-- Presets -->
+      <div class="control-group presets">
+        <div class="control-header">
+          <span class="dist-badge preset-badge">⚡</span>
+          <span class="dist-name">Presets</span>
+        </div>
+        <div class="preset-buttons">
+          <button class="preset-btn" data-preset="identical">Identical<br><small>TV = 0</small></button>
+          <button class="preset-btn" data-preset="slight">Slight Shift<br><small>TV ≈ 0.11</small></button>
+          <button class="preset-btn" data-preset="moderate">Moderate<br><small>TV ≈ 0.48</small></button>
+          <button class="preset-btn" data-preset="disjoint">Nearly Disjoint<br><small>TV ≈ 1.0</small></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explanation -->
+    <div class="explanation">
+      <div class="explanation-card">
+        <h3>What am I looking at?</h3>
+        <p>The <strong>Total Variation distance</strong> between two probability distributions $P$ and $Q$ is defined as:</p>
+        <div class="formula-block" id="main-formula"></div>
+        <p>Geometrically, this is exactly <strong>half the shaded area</strong> between the two density curves. The <span class="highlight-p">cyan region</span> shows where $p(x) > q(x)$, and the <span class="highlight-q">magenta region</span> shows where $q(x) > p(x)$. These two regions always have equal area — each equals $d_{\TV}(P, Q)$.</p>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <span>Executable Mathematics — Phase 0 Demo</span>
+      <span>·</span>
+      <span>Built by Forge 🔨</span>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
